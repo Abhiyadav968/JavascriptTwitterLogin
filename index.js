@@ -35,9 +35,11 @@ app.get('/', (req, res) => {
     res.sendFile('index.html', { user: req.user })
 })
 
-app.get('/loginUser', (req, res) => {
-    let name = req.user.displayName;
-    res.send(`<h1>Hello User ${name}</h1>`)
+app.get('/profile', (req, res) => {
+    const user = req.user;
+    const name = user.displayName;
+    const profileImageUrl = user.photos[0].value;
+    res.send(`Name ${name} <br> <br> <img src="${profileImageUrl}" alt="User Profile Image">  <br> <br> `);
 })
 
 app.get('/twitter/login', passport.authenticate('twitter'));
@@ -45,7 +47,7 @@ app.get('/twitter/login', passport.authenticate('twitter'));
 app.get('/twitter/return', passport.authenticate('twitter', {
     failureRedirect: '/'
 }), function (req, res) {
-    res.redirect('/loginUser')
+    res.redirect('/profile')
 })
 
 app.listen(3000, () => {
