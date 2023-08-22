@@ -1,14 +1,15 @@
 const express = require('express');
 const app = express()
 const path = require('path');
-var passport = require('passport');
-var Strategy = require('passport-twitter').Strategy;
-var session = require('express-session');
+const passport = require('passport');
+const Strategy = require('passport-twitter').Strategy;
+const session = require('express-session');
+require('dotenv').config();
 
 
 passport.use(new Strategy({
-    consumerKey: 'YrS9nA64VBQaV53V5Jyktjxso',
-    consumerSecret: 'apa4HA1Yv0ca0BYBw3sDoOOiUE0nJWVNTd0ExBugOQvXtuFj8X',
+    consumerKey:  process.env.TWITTER_CONSUMER_KEY,
+    consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
     callbackURL: 'http://localhost:3000/twitter/return'
 }, function (token, tokenSecret, profile, callback) {
     return callback(null, profile);
@@ -48,7 +49,7 @@ app.get('/twitter/return', passport.authenticate('twitter', {
     failureRedirect: '/'
 }), function (req, res) {
     res.redirect('/profile')
-})
+});
 
 app.listen(3000, () => {
     console.log('listing on port 3000');
